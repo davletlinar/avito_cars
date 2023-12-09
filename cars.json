@@ -1,0 +1,38 @@
+{
+    "volkswagen": {
+        "amarok": 541,
+        "arteon": 368,
+        "golf": 3046,
+        "jetta": 1084,
+        "passat": 1800,
+        "passat_cc": 220,
+        "polo": 3400,
+        "teramont": 100,
+        "tiguan": 2200,
+        "touareg": 1100
+    },
+    "audi": {
+        "a1": 286,
+        "a3": 1311,
+        "a4": 3075,
+        "a5": 1261,
+        "a6": 1200,
+        "a7": 200,
+        "a8": 250,
+        "q3": 300,
+        "q5": 600,
+        "q6": 60,
+        "q7": 700,
+        "q8": 250,
+        "tt": 50
+    },
+    "skoda": {
+        "fabia": 500,
+        "karoq": 200,
+        "kodiaq": 600,
+        "octavia": 2600,
+        "rapid": 1500,
+        "superb": 350,
+        "yeti": 500
+    }
+}
