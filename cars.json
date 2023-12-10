@@ -1,5 +1,6 @@
 {
     "volkswagen": {
+        "teramont": 100,
         "amarok": 529,
         "arteon": 397,
         "golf": 3162,
@@ -7,7 +8,6 @@
         "passat": 1800,
         "passat_cc": 220,
         "polo": 3400,
-        "teramont": 100,
         "tiguan": 2200,
         "touareg": 1100
     },
