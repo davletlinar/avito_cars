@@ -34,10 +34,10 @@ def url_to_csv(config: list, car: Car, page: int) -> 0 | 1:
     
     headers_list = list(map(lambda x: x.text, headers))
     headers_list = headers_list[1:-1]
-    headers_list = list(map(lambda x: x.replace('\xa0', ''), headers_list))
+    headers_list = list(map(lambda x: x.replace('\xa0', '').replace(' ', ''), headers_list))
     
     # create build_year column
-    main_df['build_year'] = list(map(lambda x: re.search(r'\s(\d{4})($|,)', x).group(1), headers_list))
+    main_df['build_year'] = list(map(lambda x: re.search(r',(\d{4})($|,)', x).group(1), headers_list))
 
     # create mileage_kms column
     for i in range(len(headers_list)):
