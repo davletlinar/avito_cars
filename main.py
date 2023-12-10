@@ -72,7 +72,7 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: 
             print(f"Retry processing page {page}")
             url_to_csv(config, car, page)
             sleep_time(random.randint(60, 90))  # sleep and back to work
-        except KeyError as e:
+        except Exception as e:
             print(f"❌ {e}")
             sleep_time(random.randint(60, 90))  # sleep and back to work
 
