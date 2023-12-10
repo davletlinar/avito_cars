@@ -30,19 +30,19 @@ url = f'postgresql+psycopg2://{username}:{password}@{host}:{port}/{database_name
 
 engine = create_engine(url, echo=True)
 
-
+'''
 def create_car(df: pd.Series):
     car = Cars(
-        brand_id=
-        model_id=
-        engine_id=
-        horse_pwr=horse_pwr
-        trans_id: int
-        gas_id: int
-        deive_id: int
-        build_year: int
-        mileage_kms: int
-        price_rub: int
+        brand_id: int,
+        model_id: int,
+        engine_id: int,
+        horse_pwr = horse_pwr,
+        trans_id: int,
+        gas_id: int,
+        drive_id: int,
+        build_year: int,
+        mileage_kms: int,
+        price_rub: int,
         pud_date: str)  
 
     with Session(engine) as session:  
@@ -66,3 +66,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+'''

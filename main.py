@@ -4,7 +4,6 @@ import json
 import random
 from icecream import ic
 from urllib.request import HTTPError
-from retrying import retry
 
 
 from url_to_csv import url_to_csv, get_html
@@ -62,7 +61,7 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: 
             else:
                 print(f"Estimated time remaining: {total_time//60} min\n")
             page_counter += 1
-        except KeyError as e:
+        except Exception as e:
             print(f"❌ {e}")
             retry_lst.append((car, page))
             sleep_time(random.randint(60, 90))  # sleep and back to work
