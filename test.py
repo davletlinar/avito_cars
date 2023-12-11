@@ -1,10 +1,6 @@
-from url_to_csv import url_to_csv
+from merge_csv_files import merge_csv_files
 from classes import Car
 
-car = Car('volkswagen', 'jetta')
+car = Car("Ford", "Mustang")
 
-# read config file with avito css classes
-with open("config.txt", "r", encoding="utf-8") as file:
-    config = file.read().splitlines()
-
-url_to_csv(config, car, 24)
+merge_csv_files(car)

@@ -1,38 +1,38 @@
 {
     "volkswagen": {
-        "teramont": 100,
-        "amarok": 529,
-        "arteon": 397,
-        "golf": 3162,
-        "jetta": 1084,
-        "passat": 1800,
-        "passat_cc": 220,
-        "polo": 3400,
-        "tiguan": 2200,
-        "touareg": 1100
+        "teramont": 379,
+        "amarok": 594,
+        "arteon": 445,
+        "golf": 2898,
+        "jetta": 3535,
+        "passat": 6181,
+        "passat_cc": 792,
+        "polo": 7852,
+        "tiguan": 7109,
+        "touareg": 3834
     },
     "audi": {
-        "a1": 286,
-        "a3": 1311,
-        "a4": 3075,
-        "a5": 1261,
-        "a6": 1200,
-        "a7": 200,
-        "a8": 250,
-        "q3": 300,
-        "q5": 600,
-        "q6": 60,
-        "q7": 700,
-        "q8": 250,
-        "tt": 50
+        "a1": 338,
+        "a3": 1484,
+        "a4": 2951,
+        "a5": 1240,
+        "a6": 3810,
+        "a7": 733,
+        "a8": 897,
+        "q3": 1095,
+        "q5": 2135,
+        "q6": 337,
+        "q7": 2517,
+        "q8": 942,
+        "tt": 328
     },
     "skoda": {
-        "fabia": 500,
-        "karoq": 200,
-        "kodiaq": 600,
-        "octavia": 2600,
-        "rapid": 1500,
-        "superb": 350,
-        "yeti": 500
+        "fabia": 1845,
+        "karoq": 746,
+        "kodiaq": 2128,
+        "octavia": 7956,
+        "rapid": 4835,
+        "superb": 1477,
+        "yeti": 1560
     }
 }
