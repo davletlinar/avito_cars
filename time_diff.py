@@ -9,5 +9,5 @@ def time_diff(car_object: Car, elapsed_time: int, timing_data: dict) -> int:
         time_diff = timing_data[car_object.brand][car_object.model] - elapsed_time
         timing_data[car_object.brand][car_object.model] = elapsed_time
     else:
-        pass
+        time_diff = 0
     return time_diff, timing_data

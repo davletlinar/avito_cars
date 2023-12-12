@@ -1,6 +1,9 @@
-from merge_csv_files import merge_csv_files
+from url_to_csv import url_to_csv
 from classes import Car
 
-car = Car("Ford", "Mustang")
+with open("config.txt", "r", encoding="utf-8") as file:
+    config = file.read().splitlines()
 
-merge_csv_files(car)
+car = Car('skoda', 'octavia')
+
+url_to_csv(config, car, 4)
