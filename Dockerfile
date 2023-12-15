@@ -20,7 +20,7 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /
 USER appuser
 
 # Create empty directories foo and bar
-RUN mkdir /app/exports_csv /app/merged_csv
+RUN mkdir -p /app/exports_csv /app/merged_csv
 
 # Expose default ports
 EXPOSE 8000
