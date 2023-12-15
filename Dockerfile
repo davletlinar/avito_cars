@@ -22,6 +22,9 @@ USER appuser
 # Create empty directories foo and bar
 RUN mkdir /app/exports_csv /app/merged_csv
 
+# Expose default ports
+EXPOSE 8000
+
 # During debugging, this entry point will be overridden.
 # For more information, please refer to https://aka.ms/vscode-docker-python-debug
 CMD ["python3", "main.py"]
