@@ -23,6 +23,7 @@ def merge_csv_files(car: Car) -> None:
         dfs.append(df)
 
     merged_df = pd.concat(dfs)
+    merged_df = merged_df[~(merged_df['engine'].astype(str).str.len() > 3)]
     merged_df.drop_duplicates(inplace=True)
     date = datetime.now().strftime("%Y-%m-%d")
     merged_df.to_csv(f'merged_csv/{date}_{car.brand}_{car.model}.csv', index=False)
