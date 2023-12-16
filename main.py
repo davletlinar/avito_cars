@@ -38,8 +38,9 @@ def create_car_objects() -> list:
     return car_objects
 
 
-def retry_parse_pages(retry_lst: list, total_time: int) -> list:
+def retry_parse_pages(retry_lst: list) -> None:
     '''retry pages that were not parsed due to an error'''
+    global total_time
     internal_retry_lst = [] # copy list of pages that were not parsed due to an error
     config = read_config()
     for car, page in retry_lst:
@@ -52,15 +53,15 @@ def retry_parse_pages(retry_lst: list, total_time: int) -> list:
             print(f"❌ {e}")
             internal_retry_lst.append((car, page))
             sleep_time(random.randint(60, 90))  # waiting
-        total_time = calculate_remaining_time(total_time, time_a) # calculate remaining time
+        calculate_remaining_time(time_a) # calculate remaining time
         
     if internal_retry_lst:
         retry_parse_pages(internal_retry_lst)
-    return total_time
 
 
-def calculate_remaining_time(total_time: int, time_a: int) -> int:
+def calculate_remaining_time(time_a: int) -> None:
     '''calculate remaining time after every processed page'''
+    global total_time
     time_b = int(time.time())
     time_per_page = time_b - time_a
     total_time -= time_per_page
@@ -68,11 +69,11 @@ def calculate_remaining_time(total_time: int, time_a: int) -> int:
         print(f"Estimated time remaining: {total_time//3600} h {total_time%3600//60} min\n")
     else:
         print(f"Estimated time remaining: {total_time//60} min\n")
-    return total_time
 
 
-def parse_car(car: object, car_counter: int, len_car_objects: int, total_time: int) -> int:
+def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
     '''scrape a car object and return time left'''
+    global total_time
 
     url = f"https://www.avito.ru/all/avtomobili/{car.brand}/{car.model}"
     html_content = get_html(url)
@@ -86,13 +87,13 @@ def parse_car(car: object, car_counter: int, len_car_objects: int, total_time: i
     
     sleep_time(random.randint(60, 90))  # waiting
     # scrape each page and return total time left for calculation
-    total_time = parse_pages(car, car_counter, len_car_objects, pages_lst, total_time)
+    parse_pages(car, car_counter, len_car_objects, pages_lst)
     merge_csv_files(car) # merge exported csv files into one
-    return total_time
 
 
-def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: list, total_time: int) -> None:
+def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: list) -> None:
     '''parse each page of a car and return time left as total_time'''
+    global total_time
     
     config = read_config()
     
@@ -116,15 +117,14 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: 
             sleep_time(random.randint(60, 90))  # waiting
 
         # calculate remaining time
-        total_time = calculate_remaining_time(total_time, time_a)
+        calculate_remaining_time(time_a)
     
-    total_time = retry_parse_pages(retry_lst, total_time) # retry pages that were not parsed due to an error
-    
-    return total_time
+    retry_parse_pages(retry_lst) # retry pages that were not parsed due to an error
 
 
 def main(car_objects) -> None:
     objects_counter = 0
+    global total_time
 
     # load json file for storing timing
     with open("cars.json", "r", encoding="utf-8") as file:
@@ -136,7 +136,7 @@ def main(car_objects) -> None:
     for car_object in car_objects:
         time_a = int(time.time()) # start timing
         objects_counter += 1
-        total_time = parse_car(car_object, objects_counter, len(car_objects), total_time)
+        parse_car(car_object, objects_counter, len(car_objects)) #total_time)
         time_b = int(time.time())
         elapsed_time = time_b - time_a
 

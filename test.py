@@ -1,34 +1,29 @@
 from datetime import datetime
 import os
+import random
+from icecream import ic
+from bs4 import BeautifulSoup
 from classes import Car
 
 import pandas as pd
 
-car = Car('Audi', 'A3')
+from get_html import get_html
 
-folder = 'exports_csv'
-filenames = []
+car = Car('volkswagen', 'amarok')
 
-for file in os.listdir(folder):
-    filename = os.fsdecode(file)
-    filenames.append(filename)
+def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
+    '''scrape a car object and return time left'''
+    global total_time
 
-filenames.sort()
+    url = f"https://www.avito.ru/all/avtomobili/{car.brand}/{car.model}"
+    html_content = get_html(url)
 
-dfs = []
+    if html_content:
+        soup = BeautifulSoup(html_content, "html.parser")
+        pages = soup.find_all("span", class_="styles-module-text-InivV")
+        pages_num = int(pages[-1].text) # find number of pages of a car.model
+        pages_lst = list(range(1, pages_num + 1)) # create list of pages
+        random.shuffle(pages_lst) # shuffle list of pages
+        ic(pages_num)
 
-for filename in filenames:
-    df = pd.read_csv(f'exports_csv/{filename}')
-    dfs.append(df)
-
-merged_df = pd.concat(dfs)
-print(merged_df.info())
-merged_df = merged_df[~(merged_df['engine'].astype(str).str.len() > 3)]
-merged_df.drop_duplicates(inplace=True)
-date = datetime.now().strftime("%Y-%m-%d")
-merged_df.to_csv(f'merged_csv/{date}_{car.brand}_{car.model}.csv', index=False)
-
-'''for filename in filenames:
-    os.remove(f'exports_csv/{filename}')'''
-
-print('✅ Merging complete\n')
+parse_car(car, 1, 1)
