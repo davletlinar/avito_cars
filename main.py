@@ -6,7 +6,8 @@ from icecream import ic
 from urllib.request import HTTPError
 
 
-from url_to_csv import url_to_csv, get_html
+from url_to_csv import url_to_csv
+from get_html import get_html
 from time_diff import time_diff
 from merge_csv_files import merge_csv_files
 from csv_to_df import csv_to_df
@@ -48,11 +49,11 @@ def retry_parse_pages(retry_lst: list) -> None:
         try:
             print(f"Retry processing page {page}")
             url_to_csv(config, car, page)
-            sleep_time(random.randint(60, 90))  # waiting
+            sleep_time(random.randint(60, 80))  # waiting
         except Exception as e:
             print(f"❌ {e}")
             internal_retry_lst.append((car, page))
-            sleep_time(random.randint(60, 90))  # waiting
+            sleep_time(random.randint(60, 80))  # waiting
         calculate_remaining_time(time_a) # calculate remaining time
         
     if internal_retry_lst:
@@ -85,7 +86,7 @@ def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
         pages_lst = list(range(1, pages_num + 1)) # create list of pages
         random.shuffle(pages_lst) # shuffle list of pages
     
-    sleep_time(random.randint(60, 90))  # waiting
+    sleep_time(random.randint(60, 80))  # waiting
     # scrape each page and return total time left for calculation
     parse_pages(car, car_counter, len_car_objects, pages_lst)
     merge_csv_files(car) # merge exported csv files into one
@@ -108,13 +109,13 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: 
             url_to_csv(config, car, page)
             print(f"Car {car_counter}/{len_car_objects}, page {page_counter}/{pages_num} processed")
 
-            sleep_time(random.randint(60, 90))  # waiting
+            sleep_time(random.randint(60, 80))  # waiting
             
             page_counter += 1
         except Exception as e:
             print(f"❌ {e}")
             retry_lst.append((car, page))
-            sleep_time(random.randint(60, 90))  # waiting
+            sleep_time(random.randint(60, 80))  # waiting
 
         # calculate remaining time
         calculate_remaining_time(time_a)
@@ -122,9 +123,10 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: 
     retry_parse_pages(retry_lst) # retry pages that were not parsed due to an error
 
 
-def main(car_objects) -> None:
+def main() -> None:
     objects_counter = 0
     global total_time
+    car_objects = create_car_objects()
 
     # load json file for storing timing
     with open("cars.json", "r", encoding="utf-8") as file:
@@ -151,4 +153,4 @@ def main(car_objects) -> None:
 
 
 if __name__ == "__main__":
-    main(create_car_objects())
+    main()

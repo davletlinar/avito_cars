@@ -1,13 +1,13 @@
 {
     "volkswagen": {
-        "teramont": 482,
-        "amarok": 555,
-        "arteon": 307,
-        "golf": 2866,
-        "jetta": 3558,
-        "passat": 5798,
-        "passat_cc": 795,
-        "polo": 7852,
+        "amarok": 535,
+        "arteon": 373,
+        "golf": 2776,
+        "jetta": 6270,
+        "passat": 5300,
+        "passat_cc": 769,
+        "polo": 7318,
+        "teramont": 449,
         "tiguan": 7109,
         "touareg": 3834
     },
