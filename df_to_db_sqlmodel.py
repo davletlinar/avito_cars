@@ -6,7 +6,7 @@ from classes import Cars
 
 def create_rows(main_df) -> None:
     # Set up the connection URL
-    host = '127.0.0.1'
+    host = '0.0.0.0'
     port = '5432'
     username = 'postgres'
     password = '1986'

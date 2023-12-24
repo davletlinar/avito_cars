@@ -5,11 +5,20 @@
     "sqltools.connections": [
         {
             "previewLimit": 50,
+            "server": "0.0.0.0",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "car-prices-local",
+            "database": "car-prices",
+            "username": "postgres"
+        },
+        {
+            "previewLimit": 50,
             "server": "193.104.57.46",
             "port": 5432,
             "driver": "PostgreSQL",
-            "name": "avito-cars",
-            "database": "avito-cars",
+            "name": "car-prices-remote",
+            "database": "car-prices",
             "username": "postgres"
         }
     ]
