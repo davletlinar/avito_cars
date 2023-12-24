@@ -1,67 +1,33 @@
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-from typing import Optional
-from csv_to_df import csv_to_df
+from sqlmodel import Field, SQLModel, Session, create_engine, select
 import pandas as pd
-
-
-class Cars(SQLModel, table=True):  
-    id: Optional[int] = Field(default=None, primary_key=True)
-    brand_id: int
-    modl_id: int
-    engine_id: int
-    horse_pwr: int
-    trans_id: int
-    gas_id: int
-    drive_id: int
-    build_year: int
-    mileage_kms: int
-    price_rub: int
-    pub_date: str
-
-
-# Set up the connection URL
-host = '127.0.0.1'
-port = '5432'
-username = 'postgres'
-password = '1986'
-database_name = 'avito_cars'
-
-# connection url
-url = f'postgresql+psycopg2://{username}:{password}@{host}:{port}/{database_name}'
-
-engine = create_engine(url, echo=True)
-
-
-def create_car(df: pd.Series) -> None:
-    car = Cars(brand_id = df.brand_id,
-        modl_id = df.model_id,
-        engine_id = df.engine_id,
-        horse_pwr = df.horse_pwr,
-        trans_id = df.trans_id,
-        gas_id = df.gas_id,
-        drive_id = df.drive_id,
-        build_year = df.build_year,
-        mileage_kms = df.mileage_kms,
-        price_rub = df.price_rub,
-        pub_date = df.pub_date)
-
-    with Session(engine) as session:  
-        session.add(car)
-        session.commit()
-
-
-def select_heroes() -> None:
-    with Session(engine) as session:  
-        statement = select(Hero)  
-        results = session.exec(statement)  
-        for hero in results:  
-            print(hero)  
+from icecream import ic
+from classes import Cars
     
 
-def main() -> None:
-    create_car()
-    select_heroes()  
+def create_rows(main_df) -> None:
+    # Set up the connection URL
+    host = '193.104.57.46'
+    port = '5432'
+    username = 'postgres'
+    password = '1986'
+    database_name = 'avito-cars'
 
+    # connection url
+    url = f'postgresql+psycopg2://{username}:{password}@{host}:{port}/{database_name}'
 
-if __name__ == "__main__":
-    pass
+    engine = create_engine(url, echo=False)
+    with Session(engine) as session:
+        for row in main_df.itertuples(index=False):
+            car = Cars(brand=row.brand,
+                    model=row.model,
+                    engine=row.engine,
+                    horse_pwr=row.horse_pwr,
+                    trans=row.trans,
+                    gas=row.gas,
+                    drive=row.drive,
+                    build_year=row.build_year,
+                    mileage_kms=row.mileage_kms,
+                    price_rub=row.price_rub,
+                    pub_date=row.date)
+            session.add(car)
+        session.commit()

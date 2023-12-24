@@ -3,14 +3,12 @@ import time
 import json
 import random
 from icecream import ic
-from urllib.request import HTTPError
 
 
-from url_to_csv import url_to_csv
 from get_html import get_html
 from time_diff import time_diff
-from merge_csv_files import merge_csv_files
-from csv_to_df import csv_to_df
+from url_to_db import url_to_df, df_refactor
+from df_to_db_sqlmodel import create_rows
 from classes import Car
 
 
@@ -39,27 +37,6 @@ def create_car_objects() -> list:
     return car_objects
 
 
-def retry_parse_pages(retry_lst: list) -> None:
-    '''retry pages that were not parsed due to an error'''
-    global total_time
-    internal_retry_lst = [] # copy list of pages that were not parsed due to an error
-    config = read_config()
-    for car, page in retry_lst:
-        time_a = int(time.time())
-        try:
-            print(f"Retry processing page {page}")
-            url_to_csv(config, car, page)
-            sleep_time(random.randint(60, 80))  # waiting
-        except Exception as e:
-            print(f"❌ {e}")
-            internal_retry_lst.append((car, page))
-            sleep_time(random.randint(60, 80))  # waiting
-        calculate_remaining_time(time_a) # calculate remaining time
-        
-    if internal_retry_lst:
-        retry_parse_pages(internal_retry_lst)
-
-
 def calculate_remaining_time(time_a: int) -> None:
     '''calculate remaining time after every processed page'''
     global total_time
@@ -70,6 +47,12 @@ def calculate_remaining_time(time_a: int) -> None:
         print(f"Estimated time remaining: {total_time//3600} h {total_time%3600//60} min\n")
     else:
         print(f"Estimated time remaining: {total_time//60} min\n")
+
+
+def url_to_db(config: list[str], car: Car, page: int) -> None:
+    df = url_to_df(config, car, page)
+    df = df_refactor(df)
+    create_rows(df)
 
 
 def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
@@ -86,10 +69,9 @@ def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
         pages_lst = list(range(1, pages_num + 1)) # create list of pages
         random.shuffle(pages_lst) # shuffle list of pages
     
-    sleep_time(random.randint(60, 80))  # waiting
+    sleep_time(random.randint(60, 90))  # waiting
     # scrape each page and return total time left for calculation
     parse_pages(car, car_counter, len_car_objects, pages_lst)
-    merge_csv_files(car) # merge exported csv files into one
 
 
 def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: list) -> None:
@@ -106,21 +88,42 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: 
         time_a = int(time.time())
         
         try:
-            url_to_csv(config, car, page)
+            url_to_db(config, car, page)
             print(f"Car {car_counter}/{len_car_objects}, page {page_counter}/{pages_num} processed")
 
-            sleep_time(random.randint(60, 80))  # waiting
+            sleep_time(random.randint(60, 90))  # waiting
             
             page_counter += 1
         except Exception as e:
             print(f"❌ {e}")
             retry_lst.append((car, page))
-            sleep_time(random.randint(60, 80))  # waiting
+            sleep_time(random.randint(60, 90))  # waiting
 
         # calculate remaining time
         calculate_remaining_time(time_a)
     
     retry_parse_pages(retry_lst) # retry pages that were not parsed due to an error
+    
+    
+def retry_parse_pages(retry_lst: list) -> None:
+    '''retry pages that were not parsed due to an error'''
+    global total_time
+    internal_retry_lst = [] # copy list of pages that were not parsed due to an error
+    config = read_config()
+    for car, page in retry_lst:
+        time_a = int(time.time())
+        try:
+            print(f"Retry processing page {page}")
+            url_to_db(config, car, page)
+            sleep_time(random.randint(60, 90))  # waiting
+        except Exception as e:
+            print(f"❌ {e}")
+            internal_retry_lst.append((car, page))
+            sleep_time(random.randint(60, 90))  # waiting
+        calculate_remaining_time(time_a) # calculate remaining time
+        
+    if internal_retry_lst:
+        retry_parse_pages(internal_retry_lst)
 
 
 def main() -> None:

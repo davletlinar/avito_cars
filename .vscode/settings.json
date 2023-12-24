@@ -1,5 +1,16 @@
 {
     "files.watcherExclude": {
         "**/target": true
-    }
+    },
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "193.104.57.46",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "avito-cars",
+            "database": "avito-cars",
+            "username": "postgres"
+        }
+    ]
 }
