@@ -6,11 +6,11 @@ from classes import Cars
 
 def create_rows(main_df) -> None:
     # Set up the connection URL
-    host = '193.104.57.46'
+    host = '127.0.0.1'
     port = '5432'
     username = 'postgres'
     password = '1986'
-    database_name = 'avito-cars'
+    database_name = 'car-prices'
 
     # connection url
     url = f'postgresql+psycopg2://{username}:{password}@{host}:{port}/{database_name}'

@@ -7,7 +7,7 @@ from icecream import ic
 
 from get_html import get_html
 from time_diff import time_diff
-from url_to_db import url_to_df, df_refactor
+from url_to_df import url_to_df, df_refactor
 from df_to_db_sqlmodel import create_rows
 from classes import Car
 
@@ -18,8 +18,9 @@ def read_config() -> list[str]:
         return file.read().splitlines()
     
 
-def sleep_time(secs: int) -> None:
+def sleep_time() -> None:
     '''sleep for random time with seconds status bar'''
+    secs = random.randint(60, 90)
     for _ in range(secs):
         time.sleep(1)
         print('-', end='', flush=True)
@@ -69,7 +70,7 @@ def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
         pages_lst = list(range(1, pages_num + 1)) # create list of pages
         random.shuffle(pages_lst) # shuffle list of pages
     
-    sleep_time(random.randint(60, 90))  # waiting
+    sleep_time()  # waiting
     # scrape each page and return total time left for calculation
     parse_pages(car, car_counter, len_car_objects, pages_lst)
 
@@ -91,13 +92,13 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: 
             url_to_db(config, car, page)
             print(f"Car {car_counter}/{len_car_objects}, page {page_counter}/{pages_num} processed")
 
-            sleep_time(random.randint(60, 90))  # waiting
+            sleep_time()  # waiting
             
             page_counter += 1
         except Exception as e:
             print(f"❌ {e}")
             retry_lst.append((car, page))
-            sleep_time(random.randint(60, 90))  # waiting
+            sleep_time()  # waiting
 
         # calculate remaining time
         calculate_remaining_time(time_a)
@@ -115,11 +116,11 @@ def retry_parse_pages(retry_lst: list) -> None:
         try:
             print(f"Retry processing page {page}")
             url_to_db(config, car, page)
-            sleep_time(random.randint(60, 90))  # waiting
+            sleep_time()  # waiting
         except Exception as e:
             print(f"❌ {e}")
             internal_retry_lst.append((car, page))
-            sleep_time(random.randint(60, 90))  # waiting
+            sleep_time()  # waiting
         calculate_remaining_time(time_a) # calculate remaining time
         
     if internal_retry_lst:

@@ -74,7 +74,7 @@ def url_to_df(config: list, car: Car, page: int) -> 0 | 1:
         if len(i) == 6:
             i.insert(0, '0')
         if len(i[1]) == 1:
-            i[1] = i[1] + '.0'
+            i[1] +='.0'
 
     # add battered data
     prepandas_descriptions_list = list(map(lambda x: x if x[0] == 'Битый,' else [0] + x, prepandas_descriptions_list))
@@ -128,6 +128,6 @@ def df_refactor(main_df: pd.DataFrame) -> pd.DataFrame:
     main_df['trans'] = main_df['trans'].astype('category')
     main_df['brand'] = main_df['brand'].astype('category')
     main_df['model'] = main_df['model'].astype('category')
-    main_df['engine'] = main_df['engine'].astype('category')
+    main_df['engine'] = main_df['engine'].astype('float')
 
     return main_df
