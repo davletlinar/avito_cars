@@ -20,7 +20,7 @@ def read_config() -> list[str]:
 
 def sleep_time() -> None:
     '''sleep for random time with seconds status bar'''
-    secs = random.randint(60, 90)
+    secs = random.randint(60, 80)
     for _ in range(secs):
         time.sleep(1)
         print('-', end='', flush=True)

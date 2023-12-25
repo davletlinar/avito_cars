@@ -103,6 +103,7 @@ def url_to_df(config: list, car: Car, page: int) -> 0 | 1:
 def df_refactor(main_df: pd.DataFrame) -> pd.DataFrame:
     # remove invalid data
     main_df = main_df[~(main_df['engine'].astype(str).str.len() > 3)]
+    main_df = main_df[~(main_df['horse_pwr'].isna())]
     main_df.drop_duplicates(inplace=True)
     
     # covert price_rub to integer
