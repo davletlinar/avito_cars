@@ -99,36 +99,3 @@ def url_to_df(config: list, car: Car, page: int) -> 0 | 1:
     main_df= main_df[['brand', 'model', 'engine', 'horse_pwr', 'trans', 'gas', 'drive',
                         'build_year', 'mileage_kms', 'price_rub', 'date']]
     return main_df
-
-def df_refactor(main_df: pd.DataFrame) -> pd.DataFrame:
-    # remove invalid data
-    main_df = main_df[~(main_df['engine'].astype(str).str.len() > 3)]
-    main_df = main_df[~(main_df['horse_pwr'].isna())]
-    main_df.drop_duplicates(inplace=True)
-    
-    # covert price_rub to integer
-    main_df['price_rub'] = main_df['price_rub'].astype('int32')
-
-    # convert mileage to integer
-    main_df['mileage_kms'] = main_df['mileage_kms'].astype('int32')
-
-    # convert buid_year to datetime
-    main_df['build_year'] = pd.to_datetime(main_df['build_year'], format='%Y')
-    main_df['build_year'] = main_df['build_year'].dt.year
-    
-    # convert pub_date to datetime
-    main_df['date'] = pd.to_datetime(main_df['date'], format='%Y-%m-%d')
-    main_df['date'] = main_df['date'].dt.date
-
-    # convert horse power to integer
-    main_df['horse_pwr'] = main_df['horse_pwr'].astype('int32')
-
-    # convert to categorical dtype
-    main_df['gas'] = main_df['gas'].astype('category')
-    main_df['drive'] = main_df['drive'].astype('category')
-    main_df['trans'] = main_df['trans'].astype('category')
-    main_df['brand'] = main_df['brand'].astype('category')
-    main_df['model'] = main_df['model'].astype('category')
-    main_df['engine'] = main_df['engine'].astype('float')
-
-    return main_df

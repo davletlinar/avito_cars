@@ -20,11 +20,11 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /
 USER appuser
 
 # Create empty directories foo and bar
-# RUN mkdir -p /app/exports_csv /app/merged_csv
+RUN mkdir -p /app/csv_files
 
 # Expose default ports
 EXPOSE 8000
 
 # During debugging, this entry point will be overridden.
 # For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["python3", "main.py"]
+# CMD ["python3", "main.py"]

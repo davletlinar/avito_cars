@@ -7,9 +7,10 @@ from icecream import ic
 
 from get_html import get_html
 from time_diff import time_diff
-from url_to_df import url_to_df, df_refactor
+from url_to_df import url_to_df
 from df_to_db_sqlmodel import create_rows
 from classes import Car
+from df_to_csv import df_to_csv, merge_csv
 
 
 def read_config() -> list[str]:
@@ -50,10 +51,8 @@ def calculate_remaining_time(time_a: int) -> None:
         print(f"Estimated time remaining: {total_time//60} min\n")
 
 
-def url_to_db(config: list[str], car: Car, page: int) -> None:
-    df = url_to_df(config, car, page)
-    df = df_refactor(df)
-    create_rows(df)
+def url_to_csv(config: list[str], car: Car, page: int) -> None:
+    df_to_csv(url_to_df(config, car, page), car, page)
 
 
 def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
@@ -89,7 +88,7 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: 
         time_a = int(time.time())
         
         try:
-            url_to_db(config, car, page)
+            url_to_csv(config, car, page)
             print(f"Car {car_counter}/{len_car_objects}, page {page_counter}/{pages_num} processed")
 
             sleep_time()  # waiting
@@ -115,7 +114,7 @@ def retry_parse_pages(retry_lst: list) -> None:
         time_a = int(time.time())
         try:
             print(f"Retry processing page {page}")
-            url_to_db(config, car, page)
+            url_to_csv(config, car, page)
             sleep_time()  # waiting
         except Exception as e:
             print(f"❌ {e}")
@@ -142,7 +141,7 @@ def main() -> None:
     for car_object in car_objects:
         time_a = int(time.time()) # start timing
         objects_counter += 1
-        parse_car(car_object, objects_counter, len(car_objects)) #total_time)
+        parse_car(car_object, objects_counter, len(car_objects)) #total_time
         time_b = int(time.time())
         elapsed_time = time_b - time_a
 
@@ -153,6 +152,7 @@ def main() -> None:
         # update cars.json
         with open("cars.json", "w", encoding="utf-8") as file:
             json.dump(timing_data, file, indent=4)
+    create_rows(merge_csv()) # merge csv files
     print("Well done!")
 
 
