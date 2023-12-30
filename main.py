@@ -21,7 +21,7 @@ def read_config() -> list[str]:
 
 def sleep_time() -> None:
     '''sleep for random time with seconds status bar'''
-    secs = random.randint(60, 80)
+    secs = random.randint(60, 70)
     for _ in range(secs):
         time.sleep(1)
         print('-', end='', flush=True)
@@ -62,12 +62,15 @@ def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
     url = f"https://www.avito.ru/all/avtomobili/{car.brand}/{car.model}"
     html_content = get_html(url)
 
-    if html_content:
+    try:
         soup = BeautifulSoup(html_content, "html.parser")
         pages = soup.find_all("span", class_="styles-module-text-InivV")
         pages_num = int(pages[-1].text) # find number of pages of a car.model
         pages_lst = list(range(1, pages_num + 1)) # create list of pages
-        random.shuffle(pages_lst) # shuffle list of pages
+        # random.shuffle(pages_lst) # shuffle list of pages
+    except Exception as e:
+        print(f"❌ {e}")
+        parse_car(car, car_counter, len_car_objects)
     
     sleep_time()  # waiting
     # scrape each page and return total time left for calculation
@@ -113,7 +116,7 @@ def retry_parse_pages(retry_lst: list) -> None:
     for car, page in retry_lst:
         time_a = int(time.time())
         try:
-            print(f"Retry processing page {page}")
+            print(f"↪️ Retry processing page {page}")
             url_to_csv(config, car, page)
             sleep_time()  # waiting
         except Exception as e:

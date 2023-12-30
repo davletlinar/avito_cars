@@ -22,6 +22,9 @@ USER appuser
 # Create empty directories foo and bar
 RUN mkdir -p /app/csv_files
 
+# install that SSL stuff
+RUN pip install pyopenssl ndg-httpsclient pyasn1 urllib3
+
 # Expose default ports
 EXPOSE 8000
 

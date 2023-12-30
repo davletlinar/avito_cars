@@ -1,0 +1,6 @@
+brand,model,engine,horse_pwr,trans,gas,drive,build_year,mileage_kms,price_rub,date
+Volkswagen,Golf,1.4,122,AMT,бензин,передний,2011,239000,1350000,2023-12-30
+Volkswagen,Golf,1.8,75,AT,бензин,передний,1993,286000,490000,2023-12-30
+Volkswagen,Golf,1.2,105,AMT,бензин,передний,2018,20000,1382000,2023-12-30
+Volkswagen,Golf,1.6,115,AMT,дизель,передний,2019,35790,2450000,2023-12-30
+Volkswagen,Golf,1.6,101,MT,бензин,передний,1996,150000,145000,2023-12-30

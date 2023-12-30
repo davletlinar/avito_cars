@@ -4,9 +4,15 @@ from sqlmodel import Field, SQLModel
 
 class Car:
     '''car objects for scraping'''
-    def __init__(self, brand: str, model: str):
+    def __init__(self, brand: str, model: str) -> None:
         self.brand = brand
         self.model = model
+        
+
+class Page(Car):
+    '''page objects for scraping'''
+    def __init__(self, page_num: int) -> None:
+        self.page_num = page_num
         
         
 class Cars(SQLModel, table=True):
