@@ -29,22 +29,17 @@ def get_html(url) -> str:
     proxies = {'http': f'http://{proxy_username}:{proxy_pswrd}@{proxy_ip}:{proxy_port}',
                 'https': f'http://{proxy_username}:{proxy_pswrd}@{proxy_ip}:{proxy_port}'}
 
-    # Create a custom SSL context with verification disabled
-    ssl_context = ssl.create_default_context()
-    ssl_context.check_hostname = False
-    ssl_context.verify_mode = ssl.CERT_NONE
-
     if switch == 1:
         http = Request(url, headers=make_headers('headers.json', 'user-agent.txt'))
         proxy_support = ProxyHandler(proxies)
         opener = build_opener(proxy_support)
         
-        response = opener.open(http, context=ssl_context)
+        response = opener.open(http)
         return response.read()
             
     else:
         # configure request attributes
         http = Request(url, headers=make_headers('headers.json', 'user-agent.txt'))
         
-        response = urlopen(http, context=ssl_context)
+        response = urlopen(http)
         return response.read()
