@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+from selectolax.lexbor import LexborHTMLParser
 from classes import Car
 import pandas as pd
 import datetime as dt
@@ -11,27 +11,25 @@ import logging
 logging.basicConfig(filename='description.log', encoding='utf-8', level=logging.INFO)
 
 
-def url_to_df(config: list, car: Car, page: int) -> 0 | 1:
+def read_config() -> list[str]:
+    '''read config file with avito css classes'''
+    with open("config.txt", "r", encoding="utf-8") as file:
+        return file.read().splitlines()
+    
+
+def url_to_df(car: Car, page: int) -> pd.DataFrame:
+    config = read_config()
     url = f'https://www.avito.ru/all/avtomobili/{car.brand}/{car.model}?p={page}'
     ic(url)
 
     html = get_html(url)
-    try:
-        soup = BeautifulSoup(html, 'html.parser')
-    except TypeError as e:
-        print(e)
-        print(f'Page {page} was not parsed due to an error')
-        soup = None
+    parser = LexborHTMLParser(html)
         
     main_df = pd.DataFrame() # create main dataframe
     
     # parse headers
-    if soup:
-        headers = soup.find_all('h3')
-    else:
-        return 0
-    
-    headers_list = list(map(lambda x: x.text, headers))
+    headers = parser.css('h3')
+    headers_list = list(map(lambda x: x.text(), headers))
     headers_list = headers_list[1:-1]
     headers_list = list(map(lambda x: x.replace('\xa0', '').replace(' ', ''), headers_list))
     
@@ -46,8 +44,8 @@ def url_to_df(config: list, car: Car, page: int) -> 0 | 1:
     main_df['mileage_kms'] = list(map(lambda x: re.search(r'(\d+)км', x).group(1), headers_list))
 
     # parse prices
-    prices = soup.find_all('strong', class_=config[7])
-    prices_list = list(map(lambda x: x.text[:-2], prices))
+    prices = parser.css(f'strong.{config[7]}')
+    prices_list = list(map(lambda x: x.text()[:-2], prices))
     prices_list = prices_list[1:]
    
     # remove 'от ' from a price
@@ -61,12 +59,13 @@ def url_to_df(config: list, car: Car, page: int) -> 0 | 1:
     main_df['date'] = pd.to_datetime(main_df['date'])
 
     # parse descriptions
-    descriptions = soup.find_all('p', class_=config[4])
+    descriptions = parser.css(f'p[class="{config[4]}"]')
     descriptions_list = []
     for description in descriptions:
-        if (description.text[0].isnumeric() or description.text.split(', ')[0] == 'Битый')\
-        and description.text.split(', ')[-1] != 'электро':
-            descriptions_list.append(description.text.replace('\xa0', ''))
+        ic(description.text())
+        if (description.text()[0].isnumeric() or description.text().split(', ')[0] == 'Битый')\
+        and description.text().split(', ')[-1] != 'электро':
+            descriptions_list.append(description.text().replace('\xa0', ''))
     prepandas_descriptions_list = list(map(lambda x: x.split(), descriptions_list))
     
     # insert 0 kms mileage to new cars

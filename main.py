@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+from selectolax.lexbor import LexborHTMLParser
 import time
 import json
 import random
@@ -11,12 +11,6 @@ from url_to_df import url_to_df
 from df_to_db_sqlmodel import create_rows
 from classes import Car
 from df_to_csv import df_to_csv, merge_csv
-
-
-def read_config() -> list[str]:
-    '''read config file with avito css classes'''
-    with open("config.txt", "r", encoding="utf-8") as file:
-        return file.read().splitlines()
     
 
 def sleep_time() -> None:
@@ -51,83 +45,48 @@ def calculate_remaining_time(time_a: int) -> None:
         print(f"Estimated time remaining: {total_time//60} min\n")
 
 
-def url_to_csv(config: list[str], car: Car, page: int) -> None:
-    df_to_csv(url_to_df(config, car, page), car, page)
-
-
 def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
     '''scrape a car object and return time left'''
     global total_time
 
     url = f"https://www.avito.ru/all/avtomobili/{car.brand}/{car.model}"
-    html_content = get_html(url)
+    html = get_html(url)
 
     try:
-        soup = BeautifulSoup(html_content, "html.parser")
-        pages = soup.find_all("span", class_="styles-module-text-InivV")
-        pages_num = int(pages[-1].text) # find number of pages of a car.model
-        pages_lst = list(range(1, pages_num + 1)) # create list of pages
-        # random.shuffle(pages_lst) # shuffle list of pages
+        parser = LexborHTMLParser(html)
+        pages = parser.css('span.styles-module-text-InivV') # find all pages of a car.model
+        pages_num = int(pages[-1].text()) # find number of pages of a car.model
     except Exception as e:
         print(f"❌ {e}")
         parse_car(car, car_counter, len_car_objects)
     
     sleep_time()  # waiting
     # scrape each page and return total time left for calculation
-    parse_pages(car, car_counter, len_car_objects, pages_lst)
+    parse_pages(car, car_counter, len_car_objects, pages_num)
 
 
-def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_lst: list) -> None:
+def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_num: int) -> None:
     '''parse each page of a car and return time left as total_time'''
     global total_time
     
-    config = read_config()
-    
-    pages_num = len(pages_lst) # number of pages of a car.model
-    page_counter = 1 # count current page
+    page = 1 # count current page
     retry_lst = [] # list of pages that were not parsed due to an error
     
-    for page in pages_lst:
+    while pages_num >= page:
         time_a = int(time.time())
         
         try:
-            url_to_csv(config, car, page)
-            print(f"Car {car_counter}/{len_car_objects}, page {page_counter}/{pages_num} processed")
-
+            df_to_csv(url_to_df(car, page), car, page)
+            print(f"Car {car_counter}/{len_car_objects}, page {page}/{pages_num} processed")
             sleep_time()  # waiting
-            
-            page_counter += 1
+            page += 1
         except Exception as e:
             print(f"❌ {e}")
-            retry_lst.append((car, page))
             sleep_time()  # waiting
 
         # calculate remaining time
         calculate_remaining_time(time_a)
     
-    retry_parse_pages(retry_lst) # retry pages that were not parsed due to an error
-    
-    
-def retry_parse_pages(retry_lst: list) -> None:
-    '''retry pages that were not parsed due to an error'''
-    global total_time
-    internal_retry_lst = [] # copy list of pages that were not parsed due to an error
-    config = read_config()
-    for car, page in retry_lst:
-        time_a = int(time.time())
-        try:
-            print(f"↪️ Retry processing page {page}")
-            url_to_csv(config, car, page)
-            sleep_time()  # waiting
-        except Exception as e:
-            print(f"❌ {e}")
-            internal_retry_lst.append((car, page))
-            sleep_time()  # waiting
-        calculate_remaining_time(time_a) # calculate remaining time
-        
-    if internal_retry_lst:
-        retry_parse_pages(internal_retry_lst)
-
 
 def main() -> None:
     objects_counter = 0

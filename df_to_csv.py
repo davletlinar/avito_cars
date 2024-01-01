@@ -38,6 +38,10 @@ def refactor_df(main_df: pd.DataFrame) -> pd.DataFrame:
     main_df['brand'] = main_df['brand'].astype('category')
     main_df['model'] = main_df['model'].astype('category')
     main_df['engine'] = main_df['engine'].astype('float')
+    
+    # remove incorrect data
+    main_df = main_df[main_df['horse_pwr'] < 1000]
+    main_df = main_df[main_df['engine'] < 10]
 
     return main_df
     
@@ -49,5 +53,6 @@ def merge_csv() -> pd.DataFrame:
     for file in csv_files:
         df = pd.read_csv(f"csv_files/{file}")
         main_df = pd.concat([main_df, df])
+        os.remove(f"csv_files/{file}") # delete file
     return refactor_df(main_df)
     
