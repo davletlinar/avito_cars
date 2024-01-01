@@ -59,12 +59,10 @@ def url_to_df(car: Car, page: int) -> pd.DataFrame:
     main_df['date'] = pd.to_datetime(main_df['date'])
 
     # parse descriptions
-    descriptions = parser.css(f'p[class="{config[4]}"]')
+    descriptions = parser.css('p[data-marker="item-specific-params"]')
     descriptions_list = []
     for description in descriptions:
-        ic(description.text())
-        if (description.text()[0].isnumeric() or description.text().split(', ')[0] == 'Битый')\
-        and description.text().split(', ')[-1] != 'электро':
+        if description.text().split(', ')[-1] != 'электро':
             descriptions_list.append(description.text().replace('\xa0', ''))
     prepandas_descriptions_list = list(map(lambda x: x.split(), descriptions_list))
     
