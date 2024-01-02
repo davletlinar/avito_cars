@@ -13,7 +13,7 @@ from classes import Car
 from df_to_csv import df_to_csv, merge_csv
     
 
-def sleep_time(secs=60) -> None:
+def sleep_time(secs=20) -> None:
     '''sleep for random time with seconds status bar'''
     # secs = random.randint(30, 60)
     for _ in range(secs):
@@ -58,6 +58,7 @@ def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
         pages_num = int(pages[-1].text()) # find number of pages of a car.model
     except Exception as e:
         print(f"❌ {e}")
+        sleep_time(secs=90)
         parse_car(car, car_counter, len_car_objects)
     
     sleep_time()  # waiting
