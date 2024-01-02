@@ -68,9 +68,8 @@ def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
 def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_num: int) -> None:
     '''parse each page of a car and return time left as total_time'''
     global total_time
-    
     page = 1 # count current page
-    retry_lst = [] # list of pages that were not parsed due to an error
+    retry_counter = 0 # count number of retries
     
     while pages_num >= page:
         time_a = int(time.time())
@@ -81,6 +80,9 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_num: 
             sleep_time()  # waiting
             page += 1
         except Exception as e:
+            if page == pages_num and retry_counter > 3:
+                retry_counter += 1
+                continue
             print(f"❌ {e}")
             sleep_time()  # waiting
 
