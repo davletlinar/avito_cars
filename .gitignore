@@ -1,4 +1,4 @@
 *.ipynb
 test.py
 research.ipynb
-csv_files/
+csv_files/*
