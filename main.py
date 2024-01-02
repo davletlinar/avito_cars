@@ -13,10 +13,9 @@ from classes import Car
 from df_to_csv import df_to_csv, merge_csv
     
 
-def sleep_time() -> None:
+def sleep_time(secs=60) -> None:
     '''sleep for random time with seconds status bar'''
     # secs = random.randint(30, 60)
-    secs = 60
     for _ in range(secs):
         time.sleep(1)
         print('-', end='', flush=True)
@@ -85,7 +84,7 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_num: 
                 retry_counter += 1
                 continue
             print(f"❌ {e}")
-            sleep_time()  # waiting
+            sleep_time(secs=90)  # waiting
 
         # calculate remaining time
         calculate_remaining_time(time_a)
