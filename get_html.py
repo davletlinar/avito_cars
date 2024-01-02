@@ -1,12 +1,9 @@
 from typing import IO
 from icecream import ic
 import json
-import ssl
 import random
 
 from urllib.request import urlopen, Request, ProxyHandler, build_opener
-from urllib.error import HTTPError, URLError
-import sys
 
 def make_headers(headers_file: IO, user_agent_file: IO) -> dict:
     with open(user_agent_file) as f:
@@ -21,8 +18,8 @@ def get_html(url) -> str:
     switch = 0 # 0 - no proxy, 1 - proxy
     
     # proxy settings
-    proxy_ip = '109.195.6.217'
-    proxy_port = '40426'
+    proxy_ip = '86.110.189.118'
+    proxy_port = '42539'
     proxy_username = 'fb6b6d6a56'
     proxy_pswrd = '5bba16d6b6'
     
