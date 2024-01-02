@@ -15,7 +15,8 @@ from df_to_csv import df_to_csv, merge_csv
 
 def sleep_time() -> None:
     '''sleep for random time with seconds status bar'''
-    secs = random.randint(60, 70)
+    # secs = random.randint(30, 60)
+    secs = 30
     for _ in range(secs):
         time.sleep(1)
         print('-', end='', flush=True)
