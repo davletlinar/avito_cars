@@ -80,12 +80,17 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_num: 
             print(f"Car {car_counter}/{len_car_objects}, page {page}/{pages_num} processed")
             sleep_time()  # waiting
             page += 1
-        except Exception as e:
+        except (KeyError, IndexError) as e:
             if page == pages_num and retry_counter > 3:
-                retry_counter += 1
                 continue
             print(f"❌ {e}")
+            retry_counter += 1
+            sleep_time()  # waiting
+            continue
+        except Exception as e:
+            print(f"❌ {e}")
             sleep_time(secs=90)  # waiting
+        
 
         # calculate remaining time
         calculate_remaining_time(time_a)
@@ -106,7 +111,7 @@ def main() -> None:
     for car_object in car_objects:
         time_a = int(time.time()) # start timing
         objects_counter += 1
-        parse_car(car_object, objects_counter, len(car_objects)) #total_time
+        parse_car(car_object, objects_counter, len(car_objects))
         time_b = int(time.time())
         elapsed_time = time_b - time_a
 
