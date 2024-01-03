@@ -11,17 +11,10 @@ from url_to_df import url_to_df
 from df_to_db_sqlmodel import create_rows
 from classes import Car
 from df_to_csv import df_to_csv, merge_csv
+from sleep_time import sleep_time
+
+
     
-
-def sleep_time(secs=20) -> None:
-    '''sleep for random time with seconds status bar'''
-    # secs = random.randint(30, 60)
-    for _ in range(secs):
-        time.sleep(1)
-        print('-', end='', flush=True)
-    print(f' {secs}', end='', flush=True)
-    print('\n', end='')
-
 
 def create_car_objects() -> list:
     '''read json file with brand and model names
@@ -87,10 +80,6 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_num: 
             retry_counter += 1
             sleep_time()  # waiting
             continue
-        except Exception as e:
-            print(f"❌ {e}")
-            sleep_time(secs=90)  # waiting
-        
 
         # calculate remaining time
         calculate_remaining_time(time_a)

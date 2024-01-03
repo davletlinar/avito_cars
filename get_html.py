@@ -2,8 +2,10 @@ from typing import IO
 from icecream import ic
 import json
 import random
+from sleep_time import sleep_time
 
 from urllib.request import urlopen, Request, ProxyHandler, build_opener
+from urllib.error import HTTPError
 
 def make_headers(headers_file: IO, user_agent_file: IO) -> dict:
     with open(user_agent_file) as f:
@@ -38,5 +40,10 @@ def get_html(url) -> str:
         # configure request attributes
         http = Request(url, headers=make_headers('headers.json', 'user-agent.txt'))
         
-        response = urlopen(http)
+        try:
+            response = urlopen(http)
+        except HTTPError as e:
+            print(f"❌ {e}")
+            sleep_time(secs=90)
+            response = urlopen(http)
         return response.read()
