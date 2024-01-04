@@ -41,6 +41,7 @@ def calculate_remaining_time(time_a: int) -> None:
 def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
     '''scrape a car object and return time left'''
     global total_time
+    retry = 0
 
     url = f"https://www.avito.ru/all/avtomobili/{car.brand}/{car.model}"
     html = get_html(url)
@@ -52,6 +53,9 @@ def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
     except Exception as e:
         print(f"❌ {e}")
         sleep_time(secs=90)
+        retry = 1
+    
+    if retry == 1:
         parse_car(car, car_counter, len_car_objects)
     
     sleep_time()  # waiting
