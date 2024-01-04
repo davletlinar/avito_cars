@@ -18,7 +18,7 @@ def make_headers(headers_file: IO, user_agent_file: IO) -> dict:
 def get_html(url) -> str:
     
     switch = 0 # 0 - no proxy, 1 - proxy
-    retry = 0
+    success = 0
     
     # proxy settings
     proxy_ip = '86.110.189.118'
@@ -41,14 +41,12 @@ def get_html(url) -> str:
         # configure request attributes
         http = Request(url, headers=make_headers('headers.json', 'user-agent.txt'))
         
-        try:
-            response = urlopen(http)
-        except HTTPError as e:
-            print(f"❌ {e}")
-            sleep_time(secs=90)
-            retry = 1
-        
-        if retry == 1:
-            get_html(url)
+        while success != 1:
+            try:
+                response = urlopen(http)
+                success = 1
+            except HTTPError as e:
+                print(f"❌ {e}")
+                sleep_time(secs=90)
         
         return response.read()

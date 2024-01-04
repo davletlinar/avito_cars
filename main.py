@@ -41,22 +41,20 @@ def calculate_remaining_time(time_a: int) -> None:
 def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
     '''scrape a car object and return time left'''
     global total_time
-    retry = 0
+    success = 0
 
     url = f"https://www.avito.ru/all/avtomobili/{car.brand}/{car.model}"
     html = get_html(url)
 
-    try:
-        parser = LexborHTMLParser(html)
-        pages = parser.css('span.styles-module-text-InivV') # find all pages of a car.model
-        pages_num = int(pages[-1].text()) # find number of pages of a car.model
-    except Exception as e:
-        print(f"❌ {e}")
-        sleep_time(secs=90)
-        retry = 1
-    
-    if retry == 1:
-        parse_car(car, car_counter, len_car_objects)
+    while success != 1:
+        try:
+            parser = LexborHTMLParser(html)
+            pages = parser.css('span.styles-module-text-InivV') # find all pages of a car.model
+            pages_num = int(pages[-1].text()) # find number of pages of a car.model
+            success = 1
+        except Exception as e:
+            print(f"❌ {e}")
+            sleep_time(secs=90)
     
     sleep_time()  # waiting
     # scrape each page and return total time left for calculation
