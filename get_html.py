@@ -47,6 +47,6 @@ def get_html(url) -> str:
                 success = 1
             except HTTPError as e:
                 print(f"❌ {e}")
-                sleep_time(secs=90)
+                sleep_time(secs=120)
         
         return response.read()

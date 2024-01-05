@@ -14,8 +14,6 @@ from df_to_csv import df_to_csv, merge_csv
 from sleep_time import sleep_time
 
 
-    
-
 def create_car_objects() -> list:
     '''read json file with brand and model names
     create list with car objects with brand and model names'''
