@@ -44,10 +44,10 @@ def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
     success = 0
 
     url = f"https://www.avito.ru/all/avtomobili/{car.brand}/{car.model}"
-    html = get_html(url)
 
     while success != 1:
         try:
+            html = get_html(url)
             parser = LexborHTMLParser(html)
             pages = parser.css('span.styles-module-text-InivV') # find all pages of a car.model
             pages_num = int(pages[-1].text()) # find number of pages of a car.model
