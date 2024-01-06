@@ -25,8 +25,8 @@ def refactor_df(main_df: pd.DataFrame) -> pd.DataFrame:
     main_df['build_year'] = main_df['build_year'].dt.year
     
     # convert pub_date to datetime
-    main_df['date'] = pd.to_datetime(main_df['date'], format='%Y-%m-%d')
-    main_df['date'] = main_df['date'].dt.date
+    main_df['pub_date'] = pd.to_datetime(main_df['date'], format='%Y-%m-%d')
+    main_df['pub_date'] = main_df['date'].dt.date
 
     # convert horse power to integer
     main_df['horse_pwr'] = main_df['horse_pwr'].astype('int32')
@@ -53,6 +53,11 @@ def merge_csv() -> pd.DataFrame:
     for file in csv_files:
         df = pd.read_csv(f"csv_files/{file}")
         main_df = pd.concat([main_df, df])
-        os.remove(f"csv_files/{file}") # delete file
     return refactor_df(main_df)
+
+def remove_csv() -> None:
+    # remove all csv files in the folder
+    for file in os.listdir("csv_files"):
+        if file.endswith(".csv"):
+            os.remove(f"csv_files/{file}")
     

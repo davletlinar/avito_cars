@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import date
 from sqlmodel import Field, SQLModel
 
 
@@ -25,7 +26,7 @@ class Cars(SQLModel, table=True):
     trans: str
     gas: str
     drive: str
-    build_year: int
+    build_year: date
     mileage_kms: int
     price_rub: int
-    pub_date: str
+    pub_date: date

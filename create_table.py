@@ -4,6 +4,7 @@ from datetime import date
 
 
 host = '193.104.57.46'
+# host = '127.0.0.1'
 port = '5432'
 username = 'postgres'
 password = '1986'

@@ -55,8 +55,8 @@ def url_to_df(car: Car, page: int) -> pd.DataFrame:
     main_df['price_rub'] = prices_list
     
     # add date column
-    main_df['date'] = dt.datetime.today().strftime("%Y/%m/%d")
-    main_df['date'] = pd.to_datetime(main_df['date'])
+    main_df['pub_date'] = dt.datetime.today().strftime("%Y/%m/%d")
+    main_df['pub_date'] = pd.to_datetime(main_df['pub_date'])
 
     # parse descriptions
     descriptions = parser.css('p[data-marker="item-specific-params"]')
@@ -94,5 +94,5 @@ def url_to_df(car: Car, page: int) -> pd.DataFrame:
 
     # rearranging columns order
     main_df= main_df[['brand', 'model', 'engine', 'horse_pwr', 'trans', 'gas', 'drive',
-                        'build_year', 'mileage_kms', 'price_rub', 'date']]
+                        'build_year', 'mileage_kms', 'price_rub', 'pub_date']]
     return main_df

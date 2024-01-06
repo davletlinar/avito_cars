@@ -10,7 +10,7 @@ from time_diff import time_diff
 from url_to_df import url_to_df
 from df_to_db_sqlmodel import create_rows
 from classes import Car
-from df_to_csv import df_to_csv, merge_csv
+from df_to_csv import df_to_csv, merge_csv, remove_csv
 from sleep_time import sleep_time
 
 
@@ -112,6 +112,7 @@ def main() -> None:
         with open("cars.json", "w", encoding="utf-8") as file:
             json.dump(timing_data, file, indent=4)
     create_rows(merge_csv()) # merge csv files
+    remove_csv() # remove csv files
     print("Well done!")
 
 
