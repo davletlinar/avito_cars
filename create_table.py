@@ -1,8 +1,9 @@
 from sqlmodel import SQLModel, create_engine, Field
 from typing import Optional
+from datetime import date
 
 
-host = '127.0.0.1'
+host = '193.104.57.46'
 port = '5432'
 username = 'postgres'
 password = '1986'
@@ -22,10 +23,10 @@ class Cars(SQLModel, table=True):
     trans: str
     gas: str
     drive: str
-    build_year: int
+    build_year: date
     mileage_kms: int
     price_rub: int
-    pub_date: str
+    pub_date: date
     
 def create_table():
     '''create cars table'''

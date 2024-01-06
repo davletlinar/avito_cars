@@ -48,5 +48,8 @@ def get_html(url) -> str:
             except HTTPError as e:
                 print(f"❌ {e}")
                 sleep_time(secs=120)
+            except Exception as e:
+                print(f"❌ {e}")
+                sleep_time()
         
         return response.read()
