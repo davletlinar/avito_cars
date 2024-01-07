@@ -74,7 +74,8 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_num: 
             sleep_time()  # waiting
             page += 1
         except (KeyError, IndexError) as e:
-            if page == pages_num and retry_counter > 3:
+            ic(retry_counter)
+            if retry_counter > 3:
                 continue
             print(f"❌ {e}")
             retry_counter += 1
