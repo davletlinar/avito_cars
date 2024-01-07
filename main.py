@@ -52,7 +52,7 @@ def parse_car(car: object, car_counter: int, len_car_objects: int) -> None:
             success = 1
         except Exception as e:
             print(f"❌ {e}")
-            sleep_time(secs=90)
+            sleep_time()
     
     sleep_time()  # waiting
     # scrape each page and return total time left for calculation
@@ -73,10 +73,11 @@ def parse_pages(car: object, car_counter: int, len_car_objects: int, pages_num: 
             print(f"Car {car_counter}/{len_car_objects}, page {page}/{pages_num} processed")
             sleep_time()  # waiting
             page += 1
+            retry_counter = 0
         except (KeyError, IndexError) as e:
             ic(retry_counter)
-            if retry_counter > 3:
-                continue
+            if retry_counter > 3 and page == pages_num:
+                page += 1
             print(f"❌ {e}")
             retry_counter += 1
             sleep_time()  # waiting

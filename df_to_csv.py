@@ -24,7 +24,7 @@ def refactor_df(main_df: pd.DataFrame) -> pd.DataFrame:
     main_df['build_year'] = pd.to_datetime(main_df['build_year'], format='%Y')
     
     # convert pub_date to datetime
-    main_df['pub_date'] = pd.to_datetime(main_df['date'], format='%Y-%m-%d')
+    main_df['pub_date'] = pd.to_datetime(main_df['pub_date'], format='%Y-%m-%d')
 
     # convert horse power to integer
     main_df['horse_pwr'] = main_df['horse_pwr'].astype('int32')
