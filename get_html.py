@@ -30,20 +30,20 @@ def get_html(url) -> str:
                 'https': f'http://{proxy_username}:{proxy_pswrd}@{proxy_ip}:{proxy_port}'}
 
     if switch == 1:
-        http = Request(url, headers=make_headers('headers.json', 'user-agent.txt'))
+        req = Request(url, headers=make_headers('headers.json', 'user-agent.txt'))
         proxy_support = ProxyHandler(proxies)
         opener = build_opener(proxy_support)
         
-        response = opener.open(http)
+        response = opener.open(req)
         return response.read()
             
     else:
         # configure request attributes
-        http = Request(url, headers=make_headers('headers.json', 'user-agent.txt'))
+        req = Request(url, headers=make_headers('headers.json', 'user-agent.txt'))
         
         while success != 1:
             try:
-                response = urlopen(http)
+                response = urlopen(req)
                 success = 1
             except HTTPError as e:
                 print(f"❌ {e}")
