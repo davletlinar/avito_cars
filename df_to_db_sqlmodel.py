@@ -29,6 +29,6 @@ def create_rows(main_df) -> None:
                     build_year=row.build_year,
                     mileage_kms=row.mileage_kms,
                     price_rub=row.price_rub,
-                    pub_date=row.pub_date)
+                    pub_date=row.date)
             session.add(car)
         session.commit()
