@@ -25,6 +25,9 @@ RUN mkdir -p /app/csv_files
 # install that SSL stuff
 RUN pip install pyopenssl ndg-httpsclient pyasn1 urllib3
 
+# install nano
+RUN apt-get update && apt-get install -y nano
+
 # Expose default ports
 EXPOSE 8000
 

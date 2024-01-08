@@ -1,11 +1,11 @@
-from typing import IO
 from icecream import ic
+from sleep_time import sleep_time
 import json
 import random
-from sleep_time import sleep_time
 
 from urllib.request import urlopen, Request, ProxyHandler, build_opener
 from urllib.error import HTTPError
+from typing import IO
 
 def make_headers(headers_file: IO, user_agent_file: IO) -> dict:
     with open(user_agent_file) as f:
@@ -51,5 +51,4 @@ def get_html(url) -> str:
             except Exception as e:
                 print(f"❌ {e}")
                 sleep_time()
-        
         return response.read()
