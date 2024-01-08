@@ -44,6 +44,7 @@ def get_html(url) -> str:
         while success != 1:
             try:
                 response = urlopen(req)
+                response_text = response.read()
                 success = 1
             except HTTPError as e:
                 print(f"❌ {e}")
@@ -52,4 +53,4 @@ def get_html(url) -> str:
                 print(f"❌ {e}")
                 sleep_time()
         
-        return response.read()
+        return response_text
